@@ -2,7 +2,11 @@ loadkeys fr-latin9
 pacman -Sy parted
 
 # Disk paritionning
-parted /dev/nvme0n1 mklabel gpt mkpart "EFI system partition" fat32 1MB 1024MB set 1 esp on mkpart primary 1024MB 5120MB mkpart primary 5120MB 100% 
+parted /dev/nvme0n1 mklabel gpt 
+parted /dev/nvme0n1 mkpart "EFI system partition" fat32 1MB 1024MB 
+parted /dev/nvme0n1 set 1 esp on 
+parted /dev/nvme0n1 mkpart primary 1024MB 5120MB 
+parted /dev/nvme0n1 mkpart primary 5120MB 100% 
 
 # Disk formating
 mkfs.fat -F 32 /dev/nvme0n1p1
