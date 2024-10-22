@@ -21,7 +21,7 @@ fallocate -l 1G /mnt/swapfile && chmod 600 /mnt/swapfile && mkswap /mnt/swapfile
 pacstrap -K /mnt base linux linux-firmware vi archlinuxarm-keyring grub efibootmgr
 genfstab -U /mnt >> /mnt/etc/fstab
 
-chroot_cmd(){
+chroot_cmd () {
     pacman-key --init
     pacman-key --populate archlinuxarm
 
@@ -36,5 +36,5 @@ chroot_cmd(){
     grub-install --efi-directory=/boot --bootlaoder-id=GRUB
 }
 
-arch-chroot /mnt chroot_cmd
+arch-chroot /mnt bash -c chroot_cmd
 
