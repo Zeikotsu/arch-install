@@ -1,3 +1,4 @@
+#!/bin/bash
 loadkeys fr-latin9
 pacman -Sy parted
 
