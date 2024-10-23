@@ -4,10 +4,10 @@ pacman -Sy parted
 
 # Disk paritionning
 parted /dev/nvme0n1 mklabel gpt 
-parted /dev/nvme0n1 mkpart "EFI system partition" 1MB 1024MB 
+parted /dev/nvme0n1 mkpart efi 1MB 1024MB 
 parted /dev/nvme0n1 set 1 esp on 
-parted /dev/nvme0n1 mkpart primary 1024MB 5120MB 
-parted /dev/nvme0n1 mkpart primary 5120MB 100% 
+parted /dev/nvme0n1 mkpart root 1024MB 5120MB 
+parted /dev/nvme0n1 mkpart home 5120MB 100% 
 
 # Disk formating
 mkfs.fat -F 32 /dev/nvme0n1p1

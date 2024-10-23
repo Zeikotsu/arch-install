@@ -1,3 +1,4 @@
 #!/bin/bash
-./init.sh
-arch-chroot /mnt stage1.sh
+bash ./init.sh
+cp -rp stage1.sh /mnt/tmp/
+arch-chroot /mnt bash /mnt/tmp/stage1.sh

@@ -8,5 +8,8 @@ echo -n "LANG=en_US.UTF-8" >> /etc/locale.conf
 echo -n "KEYMAP=fr-latin9" >> /etc/vconsole.conf
 echo -n "arch" >> /etc/hostname
 
+echo "archlinux" && echo "archlinux" | passwd 
+
 # GRUB
-grub-install --efi-directory=/boot --bootlaoder-id=GRUB
+grub-install --efi-directory=/boot --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
