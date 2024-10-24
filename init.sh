@@ -19,5 +19,5 @@ mount --mkdir /dev/nvme0n1p1 /mnt/boot
 mount --mkdir /dev/nvme0n1p2 /mnt/home
 fallocate -l 1G /mnt/swapfile && chmod 600 /mnt/swapfile && mkswap /mnt/swapfile && swapon /mnt/swapfile
 
-pacstrap -K /mnt base linux linux-firmware vi archlinuxarm-keyring grub efibootmgr networkmanager
+pacstrap -K /mnt base linux linux-firmware vi archlinuxarm-keyring grub efibootmgr networkmanager gnome gdm wayland zsh
 genfstab -U /mnt >> /mnt/etc/fstab
