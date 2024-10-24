@@ -5,7 +5,6 @@
 # USER_PASSWORD: primary user password
 
 init() {
-    #!/bin/bash
     pacman -Sy parted
 
     # Disk paritionning
@@ -20,40 +19,57 @@ init() {
     mkfs.ext4 /dev/nvme0n1p2
     mkfs.ext4 /dev/nvme0n1p3
 
+    # Disk mounting
     mount /dev/nvme0n1p3 /mnt
     mount --mkdir /dev/nvme0n1p1 /mnt/boot
     mount --mkdir /dev/nvme0n1p2 /mnt/home
     fallocate -l 1G /mnt/swapfile && chmod 600 /mnt/swapfile && mkswap /mnt/swapfile && swapon /mnt/swapfile
 
-    pacstrap -K /mnt base linux linux-firmware vi archlinuxarm-keyring grub efibootmgr networkmanager gnome gdm wayland zsh
+    # System Install
+    pacstrap -K /mnt base \
+        linux \
+        linux-firmware \
+        vi \
+        archlinuxarm-keyring \
+        grub \
+        efibootmgr \
+        networkmanager \
+        gnome \
+        gdm \
+        wayland \
+        zsh \
+        sudo \
+        man-db
     genfstab -U /mnt >> /mnt/etc/fstab
 }
 
 archroot_stage() {
+    # Pacman Keyring
     pacman-key --init
     pacman-key --populate archlinuxarm
 
+    # Enable Services
+    systemctl enable NetworkManager
+    systemctl enable gdm
+
+    # Clock and locale
     ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
     hwclock --systohc
     locale-gen
+    localectl set-x11-keymap fr
     echo -n "LANG=en_US.UTF-8" >> /etc/locale.conf
     echo -n "KEYMAP=fr-latin9" >> /etc/vconsole.conf
-    echo -n "arch" >> /etc/hostname
-
-    ROOT_PASSWORD=${ROOT_PASSWORD:-archlinux}
-    echo -e "$ROOT_PASSWORD\n$ROOT_PASSWORD" | passwd 
+    HOSTNAME=${HOSTNAME:-arch}
+    echo -n "$HOSTNAME" >> /etc/hostname
 
     # GRUB
     grub-install --efi-directory=/boot --bootloader-id=GRUB
     grub-mkconfig -o /boot/grub/grub.cfg
 
-    # NetworkManager
-    systemctl enable NetworkManager
-    systemctl enable gdm
-    localectl set-x11-keymap fr
-
     # Sudo
-    USER_PASSWORD=${USER_PASSWORD:-@rchlinux}
+    ROOT_PASSWORD=${ROOT_PASSWORD:-archlinux}
+    echo -e "$ROOT_PASSWORD\n$ROOT_PASSWORD" | passwd 
+    USER_PASSWORD=${USER_PASSWORD:-archlinux}
     USER_NAME=${USER_NAME:-user}
     sed -i "s/# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/" /etc/sudoers
     useradd -d /home/$USER_NAME -m -s /bin/zsh $USER_NAME
