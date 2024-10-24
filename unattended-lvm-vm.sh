@@ -72,6 +72,7 @@ archroot_stage() {
     sed -i -E 's/^(HOOKS=\(.+block)/\1 lvm2/' /etc/mkinitcpio.conf \
 		&& mkinitcpio -p
     # GRUB
+    sed -i -E 's/^GRUB_PRELOAD_MODULES="(.+)"/GRUB_PRELOAD_MODULES="\1 lvm"/' /etc/default/grub
     grub-install --efi-directory=/boot --bootloader-id=GRUB
     grub-mkconfig -o /boot/grub/grub.cfg
 
