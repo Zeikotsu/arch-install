@@ -23,6 +23,8 @@ init() {
     vgcreate vg0 /dev/${DISK_NAME}p2
     lvcreate -L 5G -n home vg0
     lvcreate -l 100%FREE -n root vg0
+    mkfs.ext4 /dev/vg0/root
+    mkfs.ext4 /dev/vg0/home
 
     # Disk mounting
     mount /dev/vg0/root /mnt
