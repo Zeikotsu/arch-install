@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 # Possible env variables declaration
 # ROOT_PASSWORD : root account password
 # USER_NAME : primary user account name
